@@ -32,7 +32,7 @@ COPY --from=build-stage /app/business business
 RUN if [ -d business/logs ]; then \
       echo 'logs directory exists, skipping'; \
     else \
-        mkdir logs; \
+        mkdir business/logs; \
     fi
 
 CMD ["python", "business/sync/entrypoint.py"]
