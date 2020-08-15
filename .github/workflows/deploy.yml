@@ -22,4 +22,8 @@ jobs:
 
     - name: Install test requirements
       run: |
-        docker ps   
+        docker build --tag ktusch-sync \ 
+            --build-arg GOOGLE_CREDENTIALS_DECRYPT="${{ secrets.GOOGLE_CREDENTIALS_DECRYPT }}" \
+            .
+        docker images
+  
