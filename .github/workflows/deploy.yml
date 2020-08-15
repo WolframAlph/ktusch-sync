@@ -7,10 +7,15 @@ on:
 
 jobs:
   build:
+
+    runs-on: ubuntu-latest
+    steps:
     - name: ls -a via ssh
-      uses: garygrossgarten/github-action-ssh@release
+      uses: fifsky/ssh-action@master
       with:
-        command: ls ~
+        command: |
+          cd /tmp
+          ls -a
         host: ${{ secrets.HOST }}
-        username: root
-        privateKey: ${{ secrets.PRIVATE_KEY}}
+        user: root
+        key: ${{ secrets.PRIVATE_KEY}}
