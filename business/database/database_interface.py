@@ -3,8 +3,8 @@ import os
 import psycopg2
 
 
-connection = psycopg2.connect(user="postgres", password=os.getenv('DATABASE_PASSWORD'), host=os.getenv('HOST'),
-                              port="5432")
+connection = psycopg2.connect(user="postgres", password=os.getenv('DATABASE_PASSWORD'), host=os.getenv('HOST') or 'localhost',
+                              port="5432" if os.getenv('HOST') else "5000")
 cursor = connection.cursor()
 
 

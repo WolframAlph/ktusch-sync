@@ -7,7 +7,6 @@ on:
 
 jobs:
   run-pytest-tests:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -43,3 +42,4 @@ jobs:
       env:
         HUBSPOT_API_KEY: ${{ secrets.HUBSPOT_API_KEY }}
         DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}    
+        HOST: ${{ secrets.HOST }}
