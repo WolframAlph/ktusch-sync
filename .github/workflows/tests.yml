@@ -42,3 +42,4 @@ jobs:
       env:
         HUBSPOT_API_KEY: ${{ secrets.HUBSPOT_API_KEY }}
         DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}    
+        HOST: ${{ secrets.HOST }}
