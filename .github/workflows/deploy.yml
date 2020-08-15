@@ -10,20 +10,9 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-    - name: ls -a via ssh
-      uses: fifsky/ssh-action@master
-      with:
-        command: |
-          cd ~
-          ls -a
-        host: ${{ secrets.HOST }}
-        user: root
-        key: ${{ secrets.PRIVATE_KEY}}
-
-    - name: Install test requirements
+    - uses: actions/checkout@v2
+    - name: Build Docker Image
       run: |
         docker build --tag ktusch-sync \ 
-            --build-arg GOOGLE_CREDENTIALS_DECRYPT="${{ secrets.GOOGLE_CREDENTIALS_DECRYPT }}" \
-            .
-        docker images
+              --build-arg GOOGLE_CREDENTIALS_DECRYPT="${{ secrets.GOOGLE_CREDENTIALS_DECRYPT }}" .
   
