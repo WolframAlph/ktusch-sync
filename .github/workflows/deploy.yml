@@ -21,7 +21,7 @@ jobs:
 #         docker save --output=ktusch-sync:${{ github.run_number }}.tar ktusch-sync:${{ github.run_number }}
     - name: tar
       run : |
-        tar -cvf requirements.txt.tar requirements.txt
+        tar -cvf deploy.tar requirements.txt
         ls
     - name: Copy .tar Image to server
       uses: appleboy/scp-action@master
@@ -29,6 +29,6 @@ jobs:
         host: ${{ secrets.HOST }}
         username: root
         key: ${{ secrets.PRIVATE_KEY }}
-        source: "/requirements.txt.tar"
+        source: "deploy.tar"
         target: "~/"
         
