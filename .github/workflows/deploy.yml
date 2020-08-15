@@ -22,12 +22,13 @@ jobs:
     - name: tar
       run : |
         tar -cvf requirements.txt.tar requirements.txt
+        ls
     - name: Copy .tar Image to server
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.HOST }}
         username: root
         key: ${{ secrets.PRIVATE_KEY }}
-        source: "requiremets.txt.tar"
+        source: "/requirements.txt.tar"
         target: "~/"
         
