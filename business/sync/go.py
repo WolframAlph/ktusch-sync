@@ -1,7 +1,7 @@
 import logging
 
-from database.database_interface import truncate_contacts, connection, rollback_on_error
-from sync.contacts_controller import ContactsController
+from business.database.database_interface import truncate_contacts, connection, rollback_on_error
+from business.sync.contacts_controller import ContactsController
 
 
 class Sync:

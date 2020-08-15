@@ -1,6 +1,7 @@
 import os
 import configparser
-from sync.interfaces import Service
+
+from business.sync.interfaces import Service
 
 
 GOOGLE_CONFIG = os.path.abspath(os.path.join(os.path.dirname(__file__), '../config/google.cfg'))

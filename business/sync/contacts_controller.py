@@ -1,13 +1,13 @@
 import logging
 
-from apis.google import GoogleApiInterface
-from apis.hubspot import HubspotApiInterface
-from apis import Google, Hubspot
-from database.database_interface import exists, get_missing_contacts, delete_contact
+from business.apis.google import GoogleApiInterface
+from business.apis.hubspot import HubspotApiInterface
+from business.apis import Google, Hubspot
+from business.database.database_interface import exists, get_missing_contacts, delete_contact
 
 import itertools
 
-from sync.contacts import Contact
+from business.sync.contacts import Contact
 
 
 class ContactsController:

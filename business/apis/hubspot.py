@@ -1,9 +1,9 @@
 import json
 
-from sync.http_session import AuthHttpSession
-from apis import Hubspot
-from sync.contacts import Contact
-from sync.interfaces import ContactsInterface
+from business.sync.http_session import AuthHttpSession
+from business.apis import Hubspot
+from business.sync.contacts import Contact
+from business.sync.interfaces import ContactsInterface
 
 
 class HubspotApiInterface(Hubspot, ContactsInterface):

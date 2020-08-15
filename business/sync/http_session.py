@@ -3,8 +3,8 @@ import os
 from requests import Session, Response, exceptions as http_exceptions
 from google.auth.transport.requests import Request
 
-from sync.auth import OAuth
-from apis import Google
+from business.sync.auth import OAuth
+from business.apis import Google
 
 
 def status_hook(response: Response, *args, **kwargs):

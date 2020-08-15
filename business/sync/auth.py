@@ -4,7 +4,7 @@ import pickle
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 
-ROOT = os.path.abspath(os.getcwd())
+ROOT = os.path.abspath(os.getcwd() + '/business')
 
 
 class OAuth:

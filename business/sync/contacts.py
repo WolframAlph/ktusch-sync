@@ -1,9 +1,9 @@
 import hashlib
 import logging
 
-from apis import Hubspot
-from database.database_interface import insert_contact, delete_contact
-from sync.interfaces import ContactsInterface
+from business.apis import Hubspot
+from business.database.database_interface import insert_contact, delete_contact
+from business.sync.interfaces import ContactsInterface
 
 
 class Contact:

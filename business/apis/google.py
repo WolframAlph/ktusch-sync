@@ -1,9 +1,9 @@
 import json
 
-from apis import Google
-from sync.contacts import Contact
-from sync.interfaces import ContactsInterface
-from sync.http_session import AuthHttpSession
+from business.apis import Google
+from business.sync.contacts import Contact
+from business.sync.interfaces import ContactsInterface
+from business.sync.http_session import AuthHttpSession
 
 
 class GoogleApiInterface(Google, ContactsInterface):

@@ -3,7 +3,7 @@ from os.path import join, abspath, normpath
 
 import schedule
 
-from sync.go import Sync
+from business.sync.go import Sync
 
 LOGGING_CONF_PATH = normpath(join(abspath(__file__), '../../config/logging.cfg'))
 
