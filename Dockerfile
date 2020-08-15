@@ -1,4 +1,4 @@
-FROM python:3.7-stretch as build-stage
+FROM python:3.7-alpine3.11 as build-stage
 
 ARG GOOGLE_CREDENTIALS_DECRYPT
 
@@ -15,13 +15,15 @@ RUN if [ -f business/oauth/credentials.dat ]; then \
         ./oauth_decrypt.sh; \
     fi
 
-FROM python:3.7-stretch as production-stage
+FROM python:3.7-alpine3.11 as production-stage
 
 WORKDIR /app
 
 ENV PYTHONPATH /app
 
 COPY requirements.txt .
+
+RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
 
 RUN pip install -r requirements.txt
 
