@@ -26,6 +26,6 @@ jobs:
         host: ${{ secrets.HOST }}
         username: root
         key: ${{ secrets.PTIVATE_KEY }}
-        source: requiremets.txt
-        target: ~/
+        source: "requiremets.txt"
+        target: "~/"
         
