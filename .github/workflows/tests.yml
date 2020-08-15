@@ -34,8 +34,7 @@ jobs:
         GOOGLE_CREDENTIALS_DECRYPT: ${{ secrets.GOOGLE_CREDENTIALS_DECRYPT }}
       run: |
         ./oauth_decrypt.sh
-
-    
+        
     - name: Test with pytest
       run: |
         pytest -v -x
