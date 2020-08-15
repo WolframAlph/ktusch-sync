@@ -2,11 +2,11 @@ name: ktusch-sync tests
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: 
+      - master
 
 jobs:
-  tests:
-
+  run-pytest-tests:
     runs-on: ubuntu-latest
 
     steps:
