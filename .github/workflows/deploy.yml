@@ -35,5 +35,5 @@ jobs:
         username: root
         key: ${{ secrets.PRIVATE_KEY }}
         script: |
-          docker load --input=ktusch-sync:${{ github.run_number }}.tar
+          docker load --input=~/ktusch-sync:${{ github.run_number }}.tar
           docker run -d --network=ktusch-sync-net --rm --name ktusch-sync -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} -e HOST=ktusch-postgres -e HUBSPOT_API_KEY=${{ secrets.HUBSPOT_API_KEY }} ktusch-sync:${{ github.run_number }}.tar
