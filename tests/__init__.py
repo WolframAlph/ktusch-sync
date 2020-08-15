@@ -1,3 +1,3 @@
-from sync.go import Sync
+from business.sync.go import Sync
 
 sync = Sync()

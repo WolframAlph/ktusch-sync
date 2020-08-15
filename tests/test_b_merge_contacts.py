@@ -1,6 +1,6 @@
 from time import sleep
 
-from database.database_interface import cursor
+from business.database.database_interface import cursor
 from tests import sync
 
 

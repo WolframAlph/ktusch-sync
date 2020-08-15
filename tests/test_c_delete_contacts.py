@@ -2,7 +2,7 @@ import random
 
 from tests import sync
 from time import sleep
-from database.database_interface import cursor
+from business.database.database_interface import cursor
 
 
 class TestDeleteContact:

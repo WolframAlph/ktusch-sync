@@ -1,7 +1,7 @@
 import random
 import string
 
-from sync.interfaces import ContactsInterface
+from business.sync.interfaces import ContactsInterface
 
 
 def random_string_generator(n):

@@ -3,11 +3,11 @@ from time import sleep
 
 import pytest
 
-from apis.google import GoogleApiInterface
-from apis.hubspot import HubspotApiInterface
+from business.apis.google import GoogleApiInterface
+from business.apis.hubspot import HubspotApiInterface
 from tests import sync
 from tests.helpers import generate_contacts
-from database.database_interface import cursor
+from business.database.database_interface import cursor
 
 
 class TestCreateContacts:

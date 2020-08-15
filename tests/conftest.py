@@ -4,9 +4,9 @@ from time import sleep
 import os.path
 
 from tests import sync
-from apis.hubspot import HubspotApiInterface
+from business.apis.hubspot import HubspotApiInterface
 from tests.helpers import delete_all_contacts, generate_contacts
-from apis.google import GoogleApiInterface
+from business.apis.google import GoogleApiInterface
 
 
 @pytest.fixture(scope='module')
