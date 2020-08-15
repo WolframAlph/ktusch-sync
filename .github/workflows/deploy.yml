@@ -19,3 +19,7 @@ jobs:
         host: ${{ secrets.HOST }}
         user: root
         key: ${{ secrets.PRIVATE_KEY}}
+
+    - name: Install test requirements
+      run: |
+        docker ps   
