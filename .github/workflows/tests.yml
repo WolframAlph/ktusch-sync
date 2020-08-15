@@ -1,8 +1,9 @@
 name: ktusch-sync tests
 
 on:
-  push:
-    branches: [ master ]
+  pull_request:
+    branches: 
+      - master
 
 jobs:
   run-pytest-tests:
