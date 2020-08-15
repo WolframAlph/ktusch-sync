@@ -21,11 +21,11 @@ jobs:
         docker save --output=ktusch-sync:${{ github.run_number }}.tar ktusch-sync:${{ github.run_number }}
     
     - name: Copy .tar Image to server
-      uses: garygrossgarten/github-action-scp@release
+      uses: appleboy/scp-action@master
       with:
-        local: ktusch-sync:${{ github.run_number }}.tar
-        remote: ~/
         host: ${{ secrets.HOST }}
         username: root
-        privateKey: ${{ secrets.PTIVATE_KEY }}
+        password: ${{ secrets.PASSWORD }}
+        source: ktusch-sync:${{ github.run_number }}.tar
+        target: ~/
         
