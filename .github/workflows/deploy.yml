@@ -12,13 +12,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       
-    - name: Build Docker Image
-      run: |
-        docker build --tag ktusch-sync:${{ github.run_number }} --build-arg GOOGLE_CREDENTIALS_DECRYPT="${{ secrets.GOOGLE_CREDENTIALS_DECRYPT }}" .
+#     - name: Build Docker Image
+#       run: |
+#         docker build --tag ktusch-sync:${{ github.run_number }} --build-arg GOOGLE_CREDENTIALS_DECRYPT="${{ secrets.GOOGLE_CREDENTIALS_DECRYPT }}" .
     
-    - name: Save docker image to .tar
-      run: |
-        docker save --output=ktusch-sync:${{ github.run_number }}.tar ktusch-sync:${{ github.run_number }}
+#     - name: Save docker image to .tar
+#       run: |
+#         docker save --output=ktusch-sync:${{ github.run_number }}.tar ktusch-sync:${{ github.run_number }}
     
     - name: Copy .tar Image to server
       uses: appleboy/scp-action@master
@@ -26,6 +26,6 @@ jobs:
         host: ${{ secrets.HOST }}
         username: root
         key: ${{ secrets.PTIVATE_KEY }}
-        source: ktusch-sync:${{ github.run_number }}.tar
+        source: requiremets.txt
         target: ~/
         
