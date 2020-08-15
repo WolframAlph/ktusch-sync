@@ -28,6 +28,6 @@ jobs:
         host: ${{ secrets.HOST }}
         username: root
         key: ${{ secrets.PRIVATE_KEY }}
-        source: "requiremets.txt"
+        source: "requiremets.txt.tar"
         target: "~/"
         
