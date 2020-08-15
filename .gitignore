@@ -129,5 +129,5 @@ dmypy.json
 .pyre/
 
 .idea/
-oauth/client_secrets.json
-oauth/credentials.dat
+business/oauth/client_secrets.json
+business/oauth/credentials.dat
