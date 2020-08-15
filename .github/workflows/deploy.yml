@@ -19,7 +19,9 @@ jobs:
 #     - name: Save docker image to .tar
 #       run: |
 #         docker save --output=ktusch-sync:${{ github.run_number }}.tar ktusch-sync:${{ github.run_number }}
-    
+    - name: tar
+      run : |
+        tar -cvf requirements.txt.tar requirements.txt
     - name: Copy .tar Image to server
       uses: appleboy/scp-action@master
       with:
