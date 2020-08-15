@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+.idea/
+oauth/client_secrets.json
+oauth/credentials.dat

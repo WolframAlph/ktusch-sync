@@ -1,0 +1,16 @@
+name: ktusch-sync deploy
+
+on:
+  push:
+    branches: [ master ]
+
+
+jobs:
+  build:
+    - name: ls -a via ssh
+      uses: garygrossgarten/github-action-ssh@release
+      with:
+        command: ls ~
+        host: ${{ secrets.HOST }}
+        username: root
+        privateKey: ${{ secrets.PRIVATE_KEY}}

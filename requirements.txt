@@ -1,0 +1,8 @@
+google
+requests
+google-api-python-client
+oauth2client
+psycopg2-binary
+schedule
+pytest
+google-auth-oauthlib

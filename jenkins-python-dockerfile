@@ -1,0 +1,12 @@
+FROM jenkins/jenkins
+USER root
+RUN apt update
+RUN apt -y upgrade
+RUN apt install -y build-essential \
+        zlib1g-dev libncurses5-dev \
+        libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget
+RUN curl -O https://www.python.org/ftp/python/3.8.0/Python-3.8.0.tar.xz
+RUN tar -xf Python-3.8.0.tar.xz
+WORKDIR Python-3.8.0
+RUN ./configure --enable-optimizations
+RUN make altinstall
