@@ -131,3 +131,4 @@ dmypy.json
 .idea/
 business/oauth/client_secrets.json
 business/oauth/credentials.dat
+business/logs/
