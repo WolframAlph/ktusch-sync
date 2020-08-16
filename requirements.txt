@@ -6,3 +6,6 @@ psycopg2-binary
 schedule
 pytest
 google-auth-oauthlib
+pyjwt
+flask
+flask-restful

@@ -37,4 +37,6 @@ RUN if [ -d business/logs ]; then \
         mkdir business/logs; \
     fi
 
-CMD ["python", "business/sync/entrypoint.py"]
+EXPOSE 5000
+
+CMD ["python", "business/rest/api.py"]

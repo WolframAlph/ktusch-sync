@@ -39,4 +39,4 @@ jobs:
           docker load --input=ktusch-sync:${{ github.run_number }}.tar
           rm -f ktusch-sync:${{ github.run_number }}.tar
           docker stop ktusch-sync || true
-          docker run -d --network=ktusch-sync-net -v /var/log/ktusch-sync:/app/business/logs --name ktusch-sync -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} -e HOST=ktusch-postgres -e HUBSPOT_API_KEY=${{ secrets.HUBSPOT_API_KEY }} ktusch-sync:${{ github.run_number }}
+          docker run -d --network=ktusch-sync-net -p 5000:5000 -v /var/log/ktusch-sync:/app/business/logs --name ktusch-sync -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} -e HOST=ktusch-postgres -e HUBSPOT_API_KEY=${{ secrets.HUBSPOT_API_KEY }} ktusch-sync:${{ github.run_number }}
