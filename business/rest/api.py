@@ -47,4 +47,4 @@ api.add_resource(StartSync, '/trigger')
 if __name__ == '__main__':
     running = Value('b', True)
     start_sync_process()
-    app.run(debug=False)
+    app.run(debug=False, host='0.0.0.0', port='5000')
