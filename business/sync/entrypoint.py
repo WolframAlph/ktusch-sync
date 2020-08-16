@@ -11,15 +11,14 @@ logging.config.fileConfig(LOGGING_CONF_PATH,
                           defaults={'logfilename': abspath(join(LOGGING_CONF_PATH, '../../logs/sync_logs.log'))})
 
 
-def run(status):
+def run():
     sync = Sync()
     schedule.every(10).seconds.do(sync.run)
 
-    while status.value:
+    while True:
         try:
             schedule.run_pending()
         except Exception as e:
             logging.exception(str(e))
-            status.value = False
-
-    logging.info('Sync exited!!!!!')
+            logging.info('Sync stopped')
+            raise
