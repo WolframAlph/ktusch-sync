@@ -11,6 +11,7 @@ COPY . .
 RUN if [ -f business/oauth/credentials.dat ]; then \
         echo 'credentials exist, skipping'; \
     else \
+        apk add --no-cache gnupg && \
         echo 'decrypting Google credentials' && \
         ./oauth_decrypt.sh; \
     fi
