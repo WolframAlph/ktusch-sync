@@ -64,6 +64,8 @@ class Authorization(Resource):
     def get(self):
         user = request.args.get('user')
         password = request.args.get('password')
+        print(os.getenv('USER'), os.getenv('PASSWORD'), user, password)
+        print(os.getenv('USER') == user, os.getenv('PASSWORD') == password)
         if user == os.getenv('USER') and password == os.getenv('PASSWORD'):
             return {'token': jwt.encode({'user': user,
                                          'exp': datetime.utcnow() + timedelta(minutes=15)}, 'secret').decode('UTF-8')}
