@@ -1,21 +1,39 @@
 from functools import wraps
 from multiprocessing import Process
+from datetime import datetime, timedelta
+import os
 
-from flask import Flask
+from flask import Flask, request
 from flask_restful import Resource, Api
+from flask_cors import CORS
 
 from business.sync.entrypoint import run
-
+import jwt
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 sync_process = Process(name='sync-process', target=run)
 
 
 def token_required(method):
+
     @wraps(method)
     def authenticate(*args, **kwargs):
-        return method(*args, **kwargs)
+        token = request.headers.get('Authorization')
+        if not token:
+            return {'message': 'Missing token'}, 401
+
+        try:
+            jwt.decode(token, 'secret')
+        except jwt.exceptions.InvalidSignatureError:
+            return {'message': 'Invalid token'}, 401
+
+        except jwt.exceptions.ExpiredSignatureError:
+            return {'message': 'Token expired'}, 401
+
+        return method(*args, **kwargs), 200
+
     return authenticate
 
 
@@ -41,10 +59,22 @@ class StartSync(Resource):
         return {'status': 'started'}
 
 
-api.add_resource(GetSyncStatus, '/getSyncStatus')
-api.add_resource(StartSync, '/trigger')
+class Authorization(Resource):
+
+    def get(self):
+        user = request.args.get('user')
+        password = request.args.get('password')
+        if user == os.getenv('USER') and password == os.getenv('PASSWORD'):
+            return {'token': jwt.encode({'user': user,
+                                         'exp': datetime.utcnow() + timedelta(minutes=15)}, 'secret').decode('UTF-8')}
+        return {'message': 'Bad username or password'}, 400
+
+
+api.add_resource(GetSyncStatus, '/status')
+api.add_resource(StartSync, '/start')
+api.add_resource(Authorization, '/authorization')
 
 
 if __name__ == '__main__':
     sync_process.start()
-    app.run(debug=False, host='0.0.0.0', port='5000')
+    app.run(debug=True, host='0.0.0.0', port='5000')
