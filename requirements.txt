@@ -9,3 +9,4 @@ google-auth-oauthlib
 pyjwt
 flask
 flask-restful
+flask_cors
