@@ -2,6 +2,7 @@ from functools import wraps
 from multiprocessing import Process
 from datetime import datetime, timedelta
 import os
+import logging
 
 from flask import Flask, request
 from flask_restful import Resource, Api
@@ -59,6 +60,16 @@ class StartSync(Resource):
         return {'status': 'started'}
 
 
+class StopSync(Resource):
+
+    @token_required
+    def post(self):
+        if sync_process.is_alive():
+            sync_process.terminate()
+            logging.info('Synchronization suspended')
+        return {'status': 'stopped'}
+
+
 class Authorization(Resource):
 
     def get(self):
@@ -73,6 +84,7 @@ class Authorization(Resource):
 api.add_resource(GetSyncStatus, '/status')
 api.add_resource(StartSync, '/start')
 api.add_resource(Authorization, '/authorization')
+api.add_resource(StopSync, '/stop')
 
 
 if __name__ == '__main__':
