@@ -1,6 +1,5 @@
-from functools import wraps
 from multiprocessing import Process
-from datetime import datetime, timedelta
+from datetime import timedelta
 import os
 import logging
 
@@ -9,46 +8,24 @@ from flask_restful import Resource, Api
 from flask_cors import CORS
 
 from business.sync.entrypoint import run
-import jwt
+from business.rest.statuses import HTTP
+from business.rest.authorization import token_required, encode_token
+
 
 app = Flask(__name__)
-CORS(app)
 api = Api(app)
+CORS(app)
 sync_process = Process(name='sync-process', target=run)
 
 
-def token_required(method):
-
-    @wraps(method)
-    def authenticate(*args, **kwargs):
-        token = request.headers.get('Authorization')
-        if not token:
-            return {'message': 'Missing token'}, 401
-
-        try:
-            jwt.decode(token, 'secret')
-        except jwt.exceptions.InvalidSignatureError:
-            return {'message': 'Invalid token'}, 401
-
-        except jwt.exceptions.ExpiredSignatureError:
-            return {'message': 'Token expired'}, 401
-
-        return method(*args, **kwargs), 200
-
-    return authenticate
-
-
-class GetSyncStatus(Resource):
+class Synchronization(Resource):
 
     @token_required
     def get(self):
         return {'alive': sync_process.is_alive()}
 
-
-class StartSync(Resource):
-
     @token_required
-    def get(self):
+    def post(self):
         global sync_process
         sync_alive = sync_process.is_alive()
 
@@ -59,11 +36,8 @@ class StartSync(Resource):
         sync_process.start()
         return {'status': 'started'}
 
-
-class StopSync(Resource):
-
     @token_required
-    def post(self):
+    def delete(self):
         if sync_process.is_alive():
             sync_process.terminate()
             logging.info('Synchronization suspended')
@@ -73,18 +47,16 @@ class StopSync(Resource):
 class Authorization(Resource):
 
     def get(self):
+        # TODO move data to payload insted of query parameters
         user = request.args.get('user')
         password = request.args.get('password')
         if user == os.getenv('USERNAME') and password == os.getenv('PASSWORD'):
-            return {'token': jwt.encode({'user': user,
-                                         'exp': datetime.utcnow() + timedelta(minutes=15)}, 'secret').decode('UTF-8')}
-        return {'message': 'Bad username or password'}, 400
+            return {'token': encode_token(expires_after=timedelta(minutes=15), user=user)}
+        return {'message': 'Bad username or password'}, HTTP.BAD_REQUEST
 
 
-api.add_resource(GetSyncStatus, '/status')
-api.add_resource(StartSync, '/start')
+api.add_resource(Synchronization, '/synchronization')
 api.add_resource(Authorization, '/authorization')
-api.add_resource(StopSync, '/stop')
 
 
 if __name__ == '__main__':

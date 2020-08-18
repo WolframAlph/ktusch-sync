@@ -14,7 +14,7 @@ logging.config.fileConfig(LOGGING_CONF_PATH,
 def run():
     sync = Sync()
     schedule.every(10).seconds.do(sync.run)
-
+    # TODO set cleanup of loggs
     while True:
         try:
             schedule.run_pending()

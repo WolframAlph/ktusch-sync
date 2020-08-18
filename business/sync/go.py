@@ -1,11 +1,12 @@
 import logging
+from multiprocessing import Value
 
 from business.database.database_interface import truncate_contacts, connection, rollback_on_error
 from business.sync.contacts_controller import ContactsController
 
 
 class Sync:
-    synchronized = False
+    synchronized = Value('b', False)
 
     def __init__(self):
         self.contacts_controller = ContactsController()
@@ -22,7 +23,7 @@ class Sync:
     def synchronize(self):
         truncate_contacts()
         self.contacts_controller.merge()
-        Sync.synchronized = True
+        Sync.synchronized.value = True
 
     @rollback_on_error
     def watch(self):
@@ -34,6 +35,9 @@ class Sync:
         for contact in contacts_to_create:
             contact.mirror()
 
+        # TODO finish update logic
+        # TODO handle 104 and 500 responses
+        # TODO set shared value between processes indicating synchronized status not to truncate table on every reloaded sync
         # for contact in contacts_to_update:
         #     contact.update()
 
@@ -42,7 +46,7 @@ class Sync:
 
     def run(self):
         logging.info('Running scheduled synchronization')
-        if not Sync.synchronized:
+        if not Sync.synchronized.value:
             self.synchronize()
         else:
             self.watch()
