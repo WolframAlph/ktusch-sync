@@ -10,6 +10,7 @@ from flask_cors import CORS
 from business.sync.entrypoint import run
 from business.rest.statuses import HTTP
 from business.rest.authorization import token_required, encode_token
+from business.database.database_interface import cursor
 
 
 app = Flask(__name__)
@@ -55,8 +56,17 @@ class Authorization(Resource):
         return {'message': 'Bad username or password'}, HTTP.BAD_REQUEST
 
 
+class Contacts:
+
+    @token_required
+    def get(self):
+        cursor.execute('select count(*) from contacts')
+        return {'contacts': cursor.fetchone()[0]}
+
+
 api.add_resource(Synchronization, '/synchronization')
 api.add_resource(Authorization, '/authorization')
+api.add_resource(Contacts, '/contacts')
 
 
 if __name__ == '__main__':
