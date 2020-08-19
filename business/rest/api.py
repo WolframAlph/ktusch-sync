@@ -56,7 +56,7 @@ class Authorization(Resource):
         return {'message': 'Bad username or password'}, HTTP.BAD_REQUEST
 
 
-class Contacts:
+class Contacts(Resource):
 
     @token_required
     def get(self):
