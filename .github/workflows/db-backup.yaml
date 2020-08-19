@@ -2,7 +2,7 @@ name: ktusch-sync database backup
 
 on:
   schedule:
-    - cron:  '* * * * *'
+    - cron:  '*/5 * * * *'
 
 jobs:
   backup:
