@@ -27,11 +27,11 @@ def retry_on_status(retries, statuses):
                 return method(self, *args, **kwargs)
             except http_exceptions.HTTPError as e:
                 if e.response.status_code in statuses and retries:
-                    print(f"Failed to perform request with error message: {str(e)}")
+                    logging.info(f"Failed to perform request with error message: {str(e)}")
                     retry_after = e.response.headers.get('Retry-After')
 
                     if not retry_after:
-                        print('No Rery-After header was provided, sleeping for 1 minute')
+                        logging.info('No Rery-After header was provided, sleeping for 1 minute')
                         sleep(60)
                     else:
                         logging.info(f"Required to sleep for {retry_after} seconds, sleeping...")
@@ -65,7 +65,8 @@ class AuthHttpSession(Session):
     def update_token(self):
         self.headers.update({'Authorization': "Bearer " + self.credentials.token})
 
-    @retry_on_status(retries=3, statuses=(HTTP.SERVER_ERROR, HTTP.CONNECTION_RESET_BY_PEER, HTTP.TOO_MANY_REQUESTS))
+    @retry_on_status(retries=3, statuses=(HTTP.SERVER_ERROR, HTTP.CONNECTION_RESET_BY_PEER, HTTP.TOO_MANY_REQUESTS,
+                                          HTTP.SERVICE_UNAVAILABLE, HTTP.GATEWAY_TIMEOUT))
     def request(self, *args, **kwargs):
         if self.credentials is not None and self.credentials.expired:
             self.credentials.refresh(Request())
