@@ -56,3 +56,25 @@ def get_missing_contacts(source, contacts_ids):
 def delete_contact(source, contact_id):
     statement = f"delete from contacts where {source} = %s"
     cursor.execute(statement, (str(contact_id), ))
+
+
+def update_contact(contact):
+    target_id_label = contact.client.name + '_id'
+    statement = f"insert into contacts(hubspot_id, google_id, contact_hash, first_name, last_name, email)" \
+                f"values(%(hubspot_id)s, %(google_id)s, %(contact_hash)s, %(first_name)s, %(last_name)s, %(email)s) " \
+                f"on conflict ({target_id_label}) do update set contact_hash = %(contact_hash)s, " \
+                f"first_name = %(first_name)s, last_name = %(last_name)s, email = %(email)s"
+    cursor.execute(statement, {
+        'hubspot_id': contact.id,
+        'google_id': contact.id,
+        'contact_hash': contact.contact_hash,
+        'first_name': contact.firstname,
+        'last_name': contact.lastname,
+        'email': contact.email
+    })
+
+
+def select_on_id(source, contact_id):
+    statement = f"select hubspot_id, google_id, contact_hash from contacts where {source} = %s"
+    cursor.execute(statement, (contact_id, ))
+    return cursor.fetchone()

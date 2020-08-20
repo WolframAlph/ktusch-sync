@@ -3,7 +3,7 @@ import logging
 from business.apis.google import GoogleApiInterface
 from business.apis.hubspot import HubspotApiInterface
 from business.apis import Google, Hubspot
-from business.database.database_interface import exists, get_missing_contacts, delete_contact
+from business.database.database_interface import exists, get_missing_contacts, delete_contact, select_on_id
 
 import itertools
 
@@ -105,4 +105,31 @@ class ContactsController:
         return new_contacts
 
     def get_updated_contacts(self, google_contacts, hubspot_contacts):
-        pass
+        contacts_to_update = set()
+        for contact in google_contacts:
+            data = select_on_id('google_id', str(contact.id))
+            if data:
+                hubspot_id, google_id, contact_hash = data
+                if contact_hash != contact.contact_hash:
+                    contacts_to_update.add(Contact(id_=hubspot_id,
+                                                   source=Hubspot,
+                                                   client=self.hubspot_client,
+                                                   mirror_client=self.google_client,
+                                                   firstname=contact.firstname,
+                                                   lastname=contact.lastname,
+                                                   email=contact.email))
+
+        for contact in hubspot_contacts:
+            data = select_on_id('hubspot_id', str(contact.id))
+            if data:
+                hubspot_id, google_id, contact_hash = data
+                if contact_hash != contact.contact_hash:
+                    contacts_to_update.add(Contact(id_=google_id,
+                                                   source=Google,
+                                                   client=self.google_client,
+                                                   mirror_client=self.hubspot_client,
+                                                   firstname=contact.firstname,
+                                                   lastname=contact.lastname,
+                                                   email=contact.email))
+
+        return contacts_to_update
