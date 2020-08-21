@@ -66,7 +66,7 @@ class AuthHttpSession(Session):
         self.headers.update({'Authorization': "Bearer " + self.credentials.token})
 
     @retry_on_status(retries=3, statuses=(HTTP.SERVER_ERROR, HTTP.CONNECTION_RESET_BY_PEER, HTTP.TOO_MANY_REQUESTS,
-                                          HTTP.SERVICE_UNAVAILABLE, HTTP.GATEWAY_TIMEOUT))
+                                          HTTP.SERVICE_UNAVAILABLE, HTTP.GATEWAY_TIMEOUT, HTTP.BAD_GATEWAY))
     def request(self, *args, **kwargs):
         if self.credentials is not None and self.credentials.expired:
             self.credentials.refresh(Request())
