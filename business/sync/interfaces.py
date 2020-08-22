@@ -27,3 +27,7 @@ class Service(ABC):
     create_contact_url = None
     delete_contact_url = None
     update_contact_url = None
+
+    @abstractmethod
+    def authenticate(self, http_session):
+        pass

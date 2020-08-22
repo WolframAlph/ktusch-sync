@@ -1,13 +1,9 @@
-import os
 from functools import wraps
 import logging
 from time import sleep
 
 from requests import Session, Response, exceptions as http_exceptions
-from google.auth.transport.requests import Request
 
-from business.sync.auth import OAuth
-from business.apis import Google
 from business.rest.statuses import HTTP
 
 
@@ -51,24 +47,14 @@ class AuthHttpSession(Session):
 
     def __init__(self, client):
         super().__init__()
-
-        if issubclass(client.__class__, Google):
-            self.credentials = OAuth().credentials
-            self.update_token()
-        else:
-            self.credentials = None
-            self.params.update({'hapikey': os.getenv('HUBSPOT_API_KEY')})
-            self.headers.update({'Content-Type': 'application/json'})
-
+        client.authenticate(self)
+        self.headers.update({'Content-Type': 'application/json'})
         self.hooks.update({'response': status_hook})
 
-    def update_token(self):
-        self.headers.update({'Authorization': "Bearer " + self.credentials.token})
+    def update_token(self, token):
+        self.headers.update({'Authorization': "Bearer " + token})
 
     @retry_on_status(retries=3, statuses=(HTTP.SERVER_ERROR, HTTP.CONNECTION_RESET_BY_PEER, HTTP.TOO_MANY_REQUESTS,
                                           HTTP.SERVICE_UNAVAILABLE, HTTP.GATEWAY_TIMEOUT, HTTP.BAD_GATEWAY))
     def request(self, *args, **kwargs):
-        if self.credentials is not None and self.credentials.expired:
-            self.credentials.refresh(Request())
-            self.update_token()
         return super().request(*args, **kwargs)

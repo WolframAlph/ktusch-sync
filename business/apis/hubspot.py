@@ -15,6 +15,7 @@ class HubspotApiInterface(Hubspot, ContactsInterface):
     )
 
     def __init__(self):
+        super().__init__()
         self.http_session = AuthHttpSession(self)
 
     @staticmethod
