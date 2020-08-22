@@ -1,4 +1,3 @@
-from multiprocessing import Process
 from datetime import timedelta
 import os
 import logging
@@ -7,40 +6,40 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
 
-from business.sync.entrypoint import run
+from business.sync.entrypoint import SyncProcess
 from business.rest.statuses import HTTP
 from business.rest.authorization import token_required, encode_token
 from business.database.database_interface import cursor
 
-
 app = Flask(__name__)
 api = Api(app)
 CORS(app)
-sync_process = Process(name='sync-process', target=run)
+sync_process = SyncProcess()
 
 
 class Synchronization(Resource):
 
     @token_required
     def get(self):
-        return {'alive': sync_process.is_alive()}
+        return {'alive': sync_process.is_alive,
+                'time_up': str(sync_process.time_up),
+                'time_down': str(sync_process.time_suspended)
+                }
 
     @token_required
     def post(self):
-        global sync_process
-        sync_alive = sync_process.is_alive()
+        sync_alive = sync_process.is_alive
 
         if sync_alive:
             return {'status': 'already running'}
 
-        sync_process = Process(name='sync-process', target=run)
         sync_process.start()
         return {'status': 'started'}
 
     @token_required
     def delete(self):
-        if sync_process.is_alive():
-            sync_process.terminate()
+        if sync_process.is_alive:
+            sync_process.stop()
             logging.info('Synchronization suspended')
         return {'status': 'stopped'}
 
@@ -67,7 +66,6 @@ class Contacts(Resource):
 api.add_resource(Synchronization, '/synchronization')
 api.add_resource(Authorization, '/authorization')
 api.add_resource(Contacts, '/contacts')
-
 
 if __name__ == '__main__':
     sync_process.start()
