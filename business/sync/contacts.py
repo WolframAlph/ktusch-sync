@@ -2,7 +2,7 @@ import hashlib
 import logging
 
 from business.apis import Hubspot
-from business.database.database_interface import insert_contact, delete_contact
+from business.database.database_interface import insert_contact, delete_contact, update_contact, exists
 from business.sync.interfaces import ContactsInterface
 
 
@@ -11,9 +11,9 @@ class Contact:
     def __init__(self, id_, source, firstname='', lastname='', email='', company='',
                  client: ContactsInterface = None, mirror_client: ContactsInterface = None):
         self.id = id_
-        self.firstname = firstname
-        self.lastname = lastname
-        self.email = email
+        self.firstname = firstname or ''
+        self.lastname = lastname or ''
+        self.email = email or ''
         self.company = company
         self.client = client
         self.mirror_client = mirror_client
@@ -21,7 +21,7 @@ class Contact:
 
     @property
     def contact_hash(self):
-        concatenated_data = self.firstname or '' + self.lastname or '' + self.email or ''
+        concatenated_data = self.firstname + self.lastname + self.email
         return hashlib.sha3_224(bytes(concatenated_data.encode('UTF-8'))).hexdigest()
 
     def mirror(self):
@@ -45,7 +45,11 @@ class Contact:
         insert_contact(contact_data)
 
     def update(self):
-        pass
+        if exists(self.client.name + '_id', self.id):
+            logging.info(f"Updating {self.mirror_client.name} contact in {self.client.name}")
+            self.client.update_contact(self)
+            logging.info(f"Updating {self.mirror_client.name} contact in database")
+            update_contact(self)
 
     def delete_on_client(self):
         logging.info(f'Deleting {self.client.name} contact with {self.client.name} id: {self.id}')
@@ -57,4 +61,4 @@ class Contact:
         logging.info(f'Successfuly deleted contact with {self.client.name} id: {self.id} from database')
 
     def __repr__(self):
-        return f"Contact({self.id}, {self.firstname}, {self.lastname}, {self.email}, {self.contact_hash}, {self.source}"
+        return f"Contact({self.id}, {self.firstname}, {self.lastname}, {self.email}, {self.contact_hash}, {self.source})"

@@ -6,7 +6,7 @@ from business.sync.contacts_controller import ContactsController
 
 
 class Sync:
-    synchronized = Value('b', False)
+    synchronized = Value('b', True)
 
     def __init__(self):
         self.contacts_controller = ContactsController()
@@ -35,14 +35,11 @@ class Sync:
         for contact in contacts_to_create:
             contact.mirror()
 
-        # TODO finish update logic
-        # TODO handle 104 and 500 responses
-        # TODO set shared value between processes indicating synchronized status not to truncate table on every reloaded sync
-        # for contact in contacts_to_update:
-        #     contact.update()
-
         for contact in contacts_to_delete:
             contact.delete_on_client()
+
+        for contact in contacts_to_update:
+            contact.update()
 
     def run(self):
         logging.info('Running scheduled synchronization')
