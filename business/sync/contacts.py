@@ -45,7 +45,7 @@ class Contact:
         insert_contact(contact_data)
 
     def update(self):
-        if exists(self.client.name + '_id', self.id):
+        if exists(self.client.name, self.id):
             logging.info(f"Updating {self.mirror_client.name} contact in {self.client.name}")
             self.client.update_contact(self)
             logging.info(f"Updating {self.mirror_client.name} contact in database")
