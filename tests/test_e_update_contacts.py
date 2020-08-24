@@ -36,7 +36,8 @@ class TestUpdateContacts:
                         id_=contact.id,
                         source=Google)
             )
-
+        sleep(20)
+        sync.watch()
         sync.watch()
         sleep(20)
 
